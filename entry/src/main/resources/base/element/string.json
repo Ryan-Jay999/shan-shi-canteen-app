@@ -1,0 +1,16 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "校园食堂避峰点餐与光盘积分"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "校园食堂避峰、点餐与光盘助手"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "慧食堂"
+    }
+  ]
+}
