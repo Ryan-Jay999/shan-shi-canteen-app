@@ -54,7 +54,7 @@ struct CanteenDetailPage {
               }
               .width('100%')
               .padding({ top: 16, bottom: 16, left: 6, right: 6 })
-              .backgroundColor(this.selectedWindow === w.id ? Color.White : '#F5F6F8')
+              .backgroundColor(this.selectedWindow === w.id ? Color.White : Color.Transparent)
               .onClick(() => {
                 this.selectedWindow = w.id;
               })
@@ -64,7 +64,9 @@ struct CanteenDetailPage {
         }
         .layoutWeight(2.2)
         .scrollBar(BarState.Off)
-        .backgroundColor('#F5F6F8')
+        .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: true })
+        .linearGradient({ angle: 165, colors: [['#FFF3E0', 0.0], ['#FFE9CE', 0.55], ['#FFF2E0', 1.0]] })
+        .backgroundImage($r('app.media.bg_food_doodle'), ImageRepeat.XY)
 
         // 右侧菜品
         Scroll() {
@@ -90,7 +92,9 @@ struct CanteenDetailPage {
         }
         .layoutWeight(5)
         .scrollBar(BarState.Off)
-        .backgroundColor(Color.White)
+        .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: true })
+        .linearGradient({ angle: 165, colors: [['#FFFBF4', 0.0], ['#FFF4E6', 0.55], ['#FFFDF9', 1.0]] })
+        .backgroundImage($r('app.media.bg_food_doodle'), ImageRepeat.XY)
       }
       .layoutWeight(1)
 

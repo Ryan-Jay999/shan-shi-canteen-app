@@ -252,6 +252,7 @@ export struct PlatePage {
         }
         .layoutWeight(1)
         .scrollBar(BarState.Off)
+        .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: true })
         .backgroundColor('#F5F6F8')
       }
       .width('100%')

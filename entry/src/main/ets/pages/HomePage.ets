@@ -136,6 +136,7 @@ export struct HomePage {
               }
             }
             .scrollable(ScrollDirection.Horizontal)
+            .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: true })
             .scrollBar(BarState.Off)
           }
           .width('100%')
@@ -146,6 +147,7 @@ export struct HomePage {
       }
       .layoutWeight(1)
       .scrollBar(BarState.Off)
+      .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: true })
       .backgroundColor('#F5F6F8')
     }
     .width('100%')

@@ -85,7 +85,9 @@ export struct MenuTabPage {
       }
       .layoutWeight(1)
       .scrollBar(BarState.Off)
-      .backgroundColor('#F5F6F8')
+      .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: true })
+      .linearGradient({ angle: 165, colors: [['#FFF9F0', 0.0], ['#FFF0DA', 0.55], ['#FFF7EC', 1.0]] })
+      .backgroundImage($r('app.media.bg_food_doodle'), ImageRepeat.XY)
     }
     .width('100%')
     .height('100%')
