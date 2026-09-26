@@ -102,6 +102,9 @@ export class Store {
     AppStorage.setOrCreate('doneTasks', [] as string[]);
     AppStorage.setOrCreate('mainTabIndex', 0);
     AppStorage.setOrCreate('lastOrder', null as OrderInfo | null);
+    AppStorage.setOrCreate('cardValue', '¥86.50');
+    AppStorage.setOrCreate('address', '梅园 3 号楼');
+    AppStorage.setOrCreate('taste', '微辣 · 少油');
   }
 
   static addPoints(points: number, title: string): void {

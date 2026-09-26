@@ -23,7 +23,7 @@ export struct HomePage {
       Column() {
         Row() {
           Column() {
-            Text('你好，张同学 👋')
+            Text('你好，任同学 👋')
               .fontSize(20)
               .fontWeight(FontWeight.Bold)
               .fontColor(Color.White)

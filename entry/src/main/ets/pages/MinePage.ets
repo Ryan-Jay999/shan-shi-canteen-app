@@ -6,6 +6,7 @@ interface MineRow {
   icon: string;
   title: string;
   value: string;
+  editable: boolean;
 }
 
 @Component
@@ -13,16 +14,46 @@ export struct MinePage {
   @StorageLink('points') points: number = 0;
   @StorageLink('streak') streak: number = 5;
   @StorageLink('lastOrder') order: OrderInfo | null = null;
+  @StorageLink('cardValue') cardValue: string = '¥86.50';
+  @StorageLink('address') address: string = '梅园 3 号楼';
+  @StorageLink('taste') taste: string = '微辣 · 少油';
   private rows: MineRow[] = [
-    { icon: '💳', title: '校园卡', value: '余额 ¥86.50' },
-    { icon: '📍', title: '常用地址', value: '梅园 3 号楼' },
-    { icon: '🌶️', title: '口味偏好', value: '微辣 · 少油' },
-    { icon: '🎧', title: '联系客服', value: '' },
-    { icon: '⚙️', title: '设置', value: '' }
+    { icon: '💳', title: '校园卡', value: '', editable: true },
+    { icon: '📍', title: '常用地址', value: '', editable: true },
+    { icon: '🌶️', title: '口味偏好', value: '', editable: true },
+    { icon: '🎧', title: '联系客服', value: '', editable: false },
+    { icon: '⚙️', title: '设置', value: '', editable: false }
   ];
 
   aboutToAppear(): void {
     Store.init();
+  }
+
+  private toast(msg: string): void {
+    this.getUIContext().getPromptAction().showToast({ message: msg });
+  }
+
+  private rowValueOf(title: string): string {
+    if (title === '校园卡') {
+      return this.cardValue;
+    }
+    if (title === '常用地址') {
+      return this.address;
+    }
+    if (title === '口味偏好') {
+      return this.taste;
+    }
+    return '';
+  }
+
+  private setRowValue(title: string, value: string): void {
+    if (title === '校园卡') {
+      this.cardValue = value;
+    } else if (title === '常用地址') {
+      this.address = value;
+    } else if (title === '口味偏好') {
+      this.taste = value;
+    }
   }
 
   build() {
@@ -39,11 +70,11 @@ export struct MinePage {
               .backgroundColor(Color.White)
               .borderRadius(29)
             Column({ space: 4 }) {
-              Text('张同学')
+              Text('任梦强同学')
                 .fontSize(18)
                 .fontWeight(FontWeight.Bold)
                 .fontColor(Color.White)
-              Text('星河大学 · 计算机学院 · 已认证')
+              Text('上海杉达学院 · 计算与智能技术学院')
                 .fontSize(11)
                 .fontColor('#FFE8DD')
             }
@@ -64,6 +95,9 @@ export struct MinePage {
                 .fontColor('#888888')
             }
             .layoutWeight(1)
+            .onClick(() => {
+              router.pushUrl({ url: 'pages/PointsDetailPage' });
+            })
             Column({ space: 3 }) {
               Text(COUPONS.length.toString())
                 .fontSize(20)
@@ -74,6 +108,9 @@ export struct MinePage {
                 .fontColor('#888888')
             }
             .layoutWeight(1)
+            .onClick(() => {
+              this.toast(`共 ${COUPONS.length} 张优惠券，见下方列表`);
+            })
             Column({ space: 3 }) {
               Text(this.streak.toString())
                 .fontSize(20)
@@ -84,6 +121,9 @@ export struct MinePage {
                 .fontColor('#888888')
             }
             .layoutWeight(1)
+            .onClick(() => {
+              AppStorage.setOrCreate('mainTabIndex', 2);
+            })
           }
           .width('100%')
           .padding({ top: 14, bottom: 14 })
@@ -201,18 +241,34 @@ export struct MinePage {
                   .fontSize(14)
                   .fontColor('#333333')
                   .layoutWeight(1)
-                if (r.value.length > 0) {
-                  Text(r.value)
+                if (r.editable) {
+                  TextInput({ text: this.rowValueOf(r.title) })
                     .fontSize(12)
-                    .fontColor('#999999')
-                    .margin({ right: 4 })
+                    .fontColor('#666666')
+                    .textAlign(TextAlign.End)
+                    .width(130)
+                    .padding(0)
+                    .backgroundColor(Color.Transparent)
+                    .onChange((v: string) => {
+                      this.setRowValue(r.title, v);
+                    })
+                  Text('✎')
+                    .fontSize(13)
+                    .fontColor('#FF6B35')
+                    .margin({ left: 4 })
+                } else {
+                  Text('›')
+                    .fontSize(16)
+                    .fontColor('#CCCCCC')
                 }
-                Text('›')
-                  .fontSize(16)
-                  .fontColor('#CCCCCC')
               }
               .width('100%')
               .height(50)
+              .onClick(() => {
+                if (!r.editable) {
+                  this.toast(`「${r.title}」功能开发中`);
+                }
+              })
               .border(idx === this.rows.length - 1 ? {} : { width: { bottom: 1 }, color: '#F2F2F2' })
             }, (r: MineRow) => r.title)
           }
