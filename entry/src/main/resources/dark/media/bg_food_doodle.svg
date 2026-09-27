@@ -1,0 +1,26 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" stroke="#FFB27A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.22">
+    <!-- 面碗与热气 -->
+    <path d="M 22 44 Q 50 86 78 44" />
+    <path d="M 34 32 q 5 -9 0 -16" />
+    <path d="M 50 28 q 5 -9 0 -16" />
+    <path d="M 66 32 q 5 -9 0 -16" />
+    <!-- 筷子 -->
+    <path d="M 112 18 L 152 62" />
+    <path d="M 120 13 L 160 57" />
+    <!-- 叶子 -->
+    <path d="M 126 108 Q 152 84 178 106 Q 154 132 126 108 Z" />
+    <path d="M 130 108 Q 152 106 176 106" />
+    <!-- 饭碗 -->
+    <path d="M 24 126 L 92 126 Q 88 172 58 172 Q 28 172 24 126 Z" />
+    <path d="M 40 126 q 6 -10 12 0" />
+    <path d="M 62 126 q 6 -10 12 0" />
+    <!-- 杯子 -->
+    <path d="M 146 142 L 182 142 L 180 176 L 148 176 Z" />
+    <path d="M 182 150 q 12 4 0 16" />
+    <!-- 点缀小圆 -->
+    <circle cx="186" cy="36" r="5" />
+    <circle cx="108" cy="188" r="4" />
+    <circle cx="14" cy="96" r="4" />
+  </g>
+</svg>

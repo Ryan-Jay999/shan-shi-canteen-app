@@ -1,7 +1,7 @@
 import { router } from '@kit.ArkUI';
 import { Canteen, Dish, WindowInfo, findCanteen } from '../common/Model';
 import { CartManager, Store } from '../common/Store';
-import { CommonTopBar, DishCounter } from '../common/Widgets';
+import { CommonTopBar, DemoBadge, DishCounter } from '../common/Widgets';
 
 interface DetailParams {
   canteenId: number;
@@ -46,15 +46,15 @@ struct CanteenDetailPage {
               Column({ space: 4 }) {
                 Text(w.name)
                   .fontSize(13)
-                  .fontColor(this.selectedWindow === w.id ? '#FF6B35' : '#555555')
+                  .fontColor(this.selectedWindow === w.id ? $r('app.color.c_brand') : $r('app.color.c_text_secondary'))
                   .fontWeight(this.selectedWindow === w.id ? FontWeight.Bold : FontWeight.Normal)
                 Text(`${w.queue} 人排队`)
                   .fontSize(10)
-                  .fontColor(this.selectedWindow === w.id ? '#FFB08A' : '#AAAAAA')
+                  .fontColor(this.selectedWindow === w.id ? $r('app.color.c_brand_light') : $r('app.color.c_text_tertiary'))
               }
               .width('100%')
               .padding({ top: 16, bottom: 16, left: 6, right: 6 })
-              .backgroundColor(this.selectedWindow === w.id ? Color.White : Color.Transparent)
+              .backgroundColor(this.selectedWindow === w.id ? $r('app.color.c_card_bg') : Color.Transparent)
               .onClick(() => {
                 this.selectedWindow = w.id;
               })
@@ -65,27 +65,39 @@ struct CanteenDetailPage {
         .layoutWeight(2.2)
         .scrollBar(BarState.Off)
         .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: true })
-        .linearGradient({ angle: 165, colors: [['#FFF3E0', 0.0], ['#FFE9CE', 0.55], ['#FFF2E0', 1.0]] })
+        .linearGradient({
+          angle: 165,
+          colors: [[$r('app.color.c_grad_left1'), 0.0], [$r('app.color.c_grad_left2'), 0.55],
+            [$r('app.color.c_grad_left3'), 1.0]]
+        })
         .backgroundImage($r('app.media.bg_food_doodle'), ImageRepeat.XY)
 
         // 右侧菜品
         Scroll() {
           Column({ space: 14 }) {
-            Row() {
+            Row({ space: 8 }) {
               Text(this.currentWindow().name)
                 .fontSize(15)
                 .fontWeight(FontWeight.Bold)
-                .fontColor('#222222')
-                .layoutWeight(1)
+                .fontColor($r('app.color.c_text_primary'))
+              DemoBadge()
+              Blank()
               Text(this.currentWindow().tags)
                 .fontSize(11)
-                .fontColor('#999999')
+                .fontColor($r('app.color.c_text_tertiary'))
             }
             .width('100%')
 
             ForEach(this.currentWindow().dishes, (d: Dish) => {
               this.DishRow(d);
             }, (d: Dish) => d.id.toString())
+
+            Text('演示数据：菜品、价格与销量均非真实在校数据')
+              .fontSize(10)
+              .fontColor($r('app.color.c_text_tertiary'))
+              .width('100%')
+              .textAlign(TextAlign.Center)
+              .padding({ top: 6, bottom: 4 })
           }
           .width('100%')
           .padding(12)
@@ -93,7 +105,11 @@ struct CanteenDetailPage {
         .layoutWeight(5)
         .scrollBar(BarState.Off)
         .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: true })
-        .linearGradient({ angle: 165, colors: [['#FFFBF4', 0.0], ['#FFF4E6', 0.55], ['#FFFDF9', 1.0]] })
+        .linearGradient({
+          angle: 165,
+          colors: [[$r('app.color.c_grad_right1'), 0.0], [$r('app.color.c_grad_right2'), 0.55],
+            [$r('app.color.c_grad_right3'), 1.0]]
+        })
         .backgroundImage($r('app.media.bg_food_doodle'), ImageRepeat.XY)
       }
       .layoutWeight(1)
@@ -106,14 +122,14 @@ struct CanteenDetailPage {
             .width(48)
             .height(48)
             .textAlign(TextAlign.Center)
-            .backgroundColor(this.cart.count() > 0 ? '#FF6B35' : '#CCCCCC')
+            .backgroundColor(this.cart.count() > 0 ? '#FF6B35' : $r('app.color.c_disabled_icon'))
             .borderRadius(24)
             .padding({ top: 10 })
           if (this.cart.count() > 0) {
             Text(this.cart.count().toString())
               .fontSize(10)
               .fontColor(Color.White)
-              .backgroundColor('#F04E4E')
+              .backgroundColor($r('app.color.c_danger'))
               .borderRadius(8)
               .constraintSize({ minWidth: 16 })
               .height(16)
@@ -128,14 +144,14 @@ struct CanteenDetailPage {
             Text(`¥${this.cart.total().toFixed(1)}`)
               .fontSize(18)
               .fontWeight(FontWeight.Bold)
-              .fontColor('#222222')
+              .fontColor($r('app.color.c_text_primary'))
             Text('已点 ' + this.cart.count().toString() + ' 份')
               .fontSize(11)
-              .fontColor('#999999')
+              .fontColor($r('app.color.c_text_tertiary'))
           } else {
             Text('购物车还是空的')
               .fontSize(14)
-              .fontColor('#999999')
+              .fontColor($r('app.color.c_text_tertiary'))
           }
         }
         .alignItems(HorizontalAlign.Start)
@@ -145,7 +161,7 @@ struct CanteenDetailPage {
         Button('去结算')
           .fontSize(15)
           .fontColor(Color.White)
-          .backgroundColor(this.cart.count() > 0 ? '#FF6B35' : '#DDDDDD')
+          .backgroundColor(this.cart.count() > 0 ? '#FF6B35' : $r('app.color.c_disabled_bg'))
           .height(44)
           .width(110)
           .borderRadius(22)
@@ -158,12 +174,12 @@ struct CanteenDetailPage {
       }
       .width('100%')
       .height(68)
-      .backgroundColor(Color.White)
-      .border({ width: { top: 1 }, color: '#F0F0F0' })
+      .backgroundColor($r('app.color.c_card_bg'))
+      .border({ width: { top: 1 }, color: $r('app.color.c_divider') })
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#F5F6F8')
+    .backgroundColor($r('app.color.c_page_bg'))
   }
 
   @Builder
@@ -174,27 +190,27 @@ struct CanteenDetailPage {
         .width(56)
         .height(56)
         .textAlign(TextAlign.Center)
-        .backgroundColor('#F7F8FA')
+        .backgroundColor($r('app.color.c_surface_soft'))
         .borderRadius(10)
 
       Column({ space: 5 }) {
         Text(d.name)
           .fontSize(14)
           .fontWeight(FontWeight.Medium)
-          .fontColor('#222222')
+          .fontColor($r('app.color.c_text_primary'))
           .maxLines(1)
         Text(d.tags.join(' · '))
           .fontSize(10)
-          .fontColor('#FF9A6E')
+          .fontColor($r('app.color.c_brand_light'))
         Row() {
           Text(`¥${d.price.toFixed(1)}`)
             .fontSize(15)
             .fontWeight(FontWeight.Bold)
-            .fontColor('#F04E4E')
+            .fontColor($r('app.color.c_danger'))
             .layoutWeight(1)
           Text(`月售 ${d.sales}`)
             .fontSize(10)
-            .fontColor('#AAAAAA')
+            .fontColor($r('app.color.c_text_weak'))
         }
         .width('100%')
       }
@@ -204,8 +220,8 @@ struct CanteenDetailPage {
       if (d.soldOut) {
         Text('已售罄')
           .fontSize(11)
-          .fontColor('#AAAAAA')
-          .backgroundColor('#F2F3F5')
+          .fontColor($r('app.color.c_text_weak'))
+          .backgroundColor($r('app.color.c_chip_bg'))
           .padding({ left: 8, right: 8, top: 5, bottom: 5 })
           .borderRadius(10)
       } else {

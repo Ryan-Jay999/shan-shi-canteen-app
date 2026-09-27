@@ -1,6 +1,7 @@
 import { promptAction, router } from '@kit.ArkUI';
 import { DAILY_TASKS, RANK_LIST, RankItem, TaskDef } from '../common/Model';
 import { Store } from '../common/Store';
+import { DemoBadge, DemoNotice } from '../common/Widgets';
 
 @Component
 export struct PlatePage {
@@ -22,7 +23,7 @@ export struct PlatePage {
       return;
     }
     this.recognizing = true;
-    // 模拟 AI 识别耗时（真实场景接入图像识别 Kit）
+    // 演示：此处模拟识别耗时，当前版本不会真实调用相机与图像识别能力
     setTimeout(() => {
       this.recognizing = false;
       this.plateDone = true;
@@ -35,8 +36,19 @@ export struct PlatePage {
   private claim(task: TaskDef): void {
     const ok = Store.claimTask(task.id, task.points, task.title);
     if (ok) {
-      promptAction.showToast({ message: `已领取 +${task.points} 积分` });
+      promptAction.showToast({ message: `已领取 +${task.points} 积分（演示数据）` });
     }
+  }
+
+  private rankLabel(idx: number): string {
+    if (idx === 0) {
+      return '🥇';
+    } else if (idx === 1) {
+      return '🥈';
+    } else if (idx === 2) {
+      return '🥉';
+    }
+    return (idx + 1).toString();
   }
 
   build() {
@@ -60,14 +72,14 @@ export struct PlatePage {
                     .fontColor(Color.White)
                   Text('我的节约积分')
                     .fontSize(12)
-                    .fontColor('#FFE8DD')
+                    .fontColor($r('app.color.c_on_brand_sub'))
                 }
                 .alignItems(HorizontalAlign.Start)
                 .layoutWeight(1)
                 Text('积分明细 ›')
                   .fontSize(12)
-                  .fontColor('#B45309')
-                  .backgroundColor('#FFF7E6')
+                  .fontColor($r('app.color.c_brand_text'))
+                  .backgroundColor($r('app.color.c_warm_bg'))
                   .padding({ left: 10, right: 10, top: 6, bottom: 6 })
                   .borderRadius(14)
                   .onClick(() => {
@@ -79,20 +91,22 @@ export struct PlatePage {
             }
             .width('100%')
             .padding({ left: 16, right: 16, bottom: 18 })
-            .linearGradient({ angle: 140, colors: [['#48C78E', 0.0], ['#2BB673', 1.0]] })
+            .linearGradient({ angle: 140, colors: [['#2E9A66', 0.0], ['#177A4C', 1.0]] })
 
             Column({ space: 14 }) {
+              DemoNotice({ text: '演示版：积分、打卡记录、任务与排行榜均为演示数据，不接入真实校园系统。' })
+
               // 连续打卡
               Column({ space: 12 }) {
                 Row() {
                   Text(`连续光盘 ${this.streak} 天`)
                     .fontSize(15)
                     .fontWeight(FontWeight.Bold)
-                    .fontColor('#222222')
+                    .fontColor($r('app.color.c_text_primary'))
                     .layoutWeight(1)
                   Text('坚持就是节约小达人 🌱')
                     .fontSize(11)
-                    .fontColor('#999999')
+                    .fontColor($r('app.color.c_text_tertiary'))
                 }
                 .width('100%')
                 Row() {
@@ -105,10 +119,12 @@ export struct PlatePage {
                         .height(28)
                         .textAlign(TextAlign.Center)
                         .borderRadius(14)
-                        .backgroundColor(i < this.streak || (i === 6 && this.plateDone) ? '#2BB673' : '#E5E7EB')
+                        .backgroundColor(i < this.streak || (i === 6 && this.plateDone)
+                          ? '#177A4C'
+                          : $r('app.color.c_disabled_bg2'))
                       Text(['一', '二', '三', '四', '五', '六', '今'][i])
                         .fontSize(10)
-                        .fontColor(i === 6 ? '#2BB673' : '#999999')
+                        .fontColor(i === 6 ? $r('app.color.c_success') : $r('app.color.c_text_tertiary'))
                     }
                     .layoutWeight(1)
                   }, (i: number) => i.toString())
@@ -117,32 +133,37 @@ export struct PlatePage {
               }
               .width('100%')
               .padding(14)
-              .backgroundColor(Color.White)
+              .backgroundColor($r('app.color.c_card_bg'))
               .borderRadius(14)
 
               // 拍照打卡
               Column({ space: 10 }) {
-                Text('餐后拍照，AI 识别光盘')
-                  .fontSize(15)
-                  .fontWeight(FontWeight.Bold)
-                  .fontColor('#222222')
-                  .width('100%')
+                Row({ space: 8 }) {
+                  Text('餐后拍照识别（演示）')
+                    .fontSize(15)
+                    .fontWeight(FontWeight.Bold)
+                    .fontColor($r('app.color.c_text_primary'))
+                  DemoBadge()
+                }
+                .width('100%')
                 Stack() {
                   Column({ space: 10 }) {
                     Text(this.plateDone ? '✅' : '📷')
                       .fontSize(46)
-                    Text(this.plateDone ? '今日已完成光盘打卡' : '拍摄餐后餐盘')
+                    Text(this.plateDone ? '今日已完成光盘打卡' : '拍摄餐后餐盘（演示）')
                       .fontSize(14)
-                      .fontColor(this.plateDone ? '#2BB673' : '#555555')
-                    Text(this.plateDone ? '+20 积分已到账' : '识别为光盘可获得 20 积分')
+                      .fontColor(this.plateDone ? $r('app.color.c_success') : $r('app.color.c_text_secondary'))
+                    Text(this.plateDone ? '+20 积分已到账（演示）' : '演示流程，不会调用相机；识别为光盘可得 20 积分')
                       .fontSize(12)
-                      .fontColor('#999999')
+                      .fontColor($r('app.color.c_text_tertiary'))
+                      .textAlign(TextAlign.Center)
+                      .padding({ left: 12, right: 12 })
                   }
                   .justifyContent(FlexAlign.Center)
                 }
                 .width('100%')
                 .height(170)
-                .backgroundColor(this.plateDone ? '#EAF8F1' : '#F7F8FA')
+                .backgroundColor(this.plateDone ? $r('app.color.c_success_bg') : $r('app.color.c_surface_soft'))
                 .borderRadius(12)
                 .onClick(() => {
                   this.startRecognize();
@@ -150,7 +171,7 @@ export struct PlatePage {
               }
               .width('100%')
               .padding(14)
-              .backgroundColor(Color.White)
+              .backgroundColor($r('app.color.c_card_bg'))
               .borderRadius(14)
 
               // 今日任务
@@ -158,7 +179,7 @@ export struct PlatePage {
                 Text('今日节约任务')
                   .fontSize(15)
                   .fontWeight(FontWeight.Bold)
-                  .fontColor('#222222')
+                  .fontColor($r('app.color.c_text_primary'))
                   .width('100%')
                 ForEach(DAILY_TASKS, (t: TaskDef) => {
                   Row({ space: 10 }) {
@@ -167,31 +188,31 @@ export struct PlatePage {
                       .width(40)
                       .height(40)
                       .textAlign(TextAlign.Center)
-                      .backgroundColor('#F7F8FA')
+                      .backgroundColor($r('app.color.c_surface_soft'))
                       .borderRadius(20)
                     Column({ space: 3 }) {
                       Text(t.title)
                         .fontSize(14)
                         .fontWeight(FontWeight.Medium)
-                        .fontColor('#222222')
+                        .fontColor($r('app.color.c_text_primary'))
                       Text(t.desc)
                         .fontSize(11)
-                        .fontColor('#999999')
+                        .fontColor($r('app.color.c_text_tertiary'))
                     }
                     .alignItems(HorizontalAlign.Start)
                     .layoutWeight(1)
                     if (Store.isTaskDone(t.id)) {
                       Text('已领取')
                         .fontSize(12)
-                        .fontColor('#999999')
-                        .backgroundColor('#F2F3F5')
+                        .fontColor($r('app.color.c_text_tertiary'))
+                        .backgroundColor($r('app.color.c_chip_bg'))
                         .padding({ left: 10, right: 10, top: 6, bottom: 6 })
                         .borderRadius(14)
                     } else {
                       Text(`+${t.points}`)
                         .fontSize(12)
-                        .fontColor('#2BB673')
-                        .backgroundColor('#E8F8F0')
+                        .fontColor($r('app.color.c_success'))
+                        .backgroundColor($r('app.color.c_success_bg'))
                         .padding({ left: 10, right: 10, top: 6, bottom: 6 })
                         .borderRadius(14)
                         .onClick(() => {
@@ -204,36 +225,42 @@ export struct PlatePage {
               }
               .width('100%')
               .padding(14)
-              .backgroundColor(Color.White)
+              .backgroundColor($r('app.color.c_card_bg'))
               .borderRadius(14)
 
               // 节约榜
               Column({ space: 10 }) {
-                Row() {
+                Row({ space: 8 }) {
                   Text('光盘节约榜')
                     .fontSize(15)
                     .fontWeight(FontWeight.Bold)
-                    .fontColor('#222222')
-                    .layoutWeight(1)
-                  Text('本月')
+                    .fontColor($r('app.color.c_text_primary'))
+                  DemoBadge()
+                  Blank()
+                  Text('本月 · 演示数据')
                     .fontSize(11)
-                    .fontColor('#999999')
+                    .fontColor($r('app.color.c_text_tertiary'))
                 }
                 .width('100%')
                 ForEach(RANK_LIST, (r: RankItem, idx: number) => {
                   Row({ space: 10 }) {
-                    Text(['🥇', '🥈', '🥉', '4', '5'][idx])
-                      .fontSize(14)
-                      .width(24)
+                    Text(this.rankLabel(idx))
+                      .fontSize(idx < 3 ? 14 : 12)
+                      .fontWeight(FontWeight.Bold)
+                      .fontColor($r('app.color.c_rank_no'))
                       .textAlign(TextAlign.Center)
+                      .width(24)
+                      .height(24)
+                      .borderRadius(12)
+                      .backgroundColor(idx < 3 ? Color.Transparent : $r('app.color.c_chip_bg'))
                     Text(r.name)
                       .fontSize(13)
-                      .fontColor(r.self === true ? '#2BB673' : '#333333')
+                      .fontColor(r.self === true ? $r('app.color.c_success') : $r('app.color.c_text_body'))
                       .fontWeight(r.self === true ? FontWeight.Bold : FontWeight.Normal)
                       .layoutWeight(1)
                     Text(`${r.days} 天`)
                       .fontSize(13)
-                      .fontColor('#666666')
+                      .fontColor($r('app.color.c_text_secondary'))
                   }
                   .width('100%')
                   .padding({ top: 6, bottom: 6 })
@@ -241,7 +268,7 @@ export struct PlatePage {
               }
               .width('100%')
               .padding(14)
-              .backgroundColor(Color.White)
+              .backgroundColor($r('app.color.c_card_bg'))
               .borderRadius(14)
               .margin({ bottom: 12 })
             }
@@ -253,7 +280,7 @@ export struct PlatePage {
         .layoutWeight(1)
         .scrollBar(BarState.Off)
         .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: true })
-        .backgroundColor('#F5F6F8')
+        .backgroundColor($r('app.color.c_page_bg'))
       }
       .width('100%')
       .height('100%')
@@ -263,17 +290,17 @@ export struct PlatePage {
         Column({ space: 14 }) {
           Text('🔍')
             .fontSize(42)
-          Text('AI 识别中…')
+          Text('识别中…（演示）')
             .fontSize(16)
             .fontColor(Color.White)
-          Text('正在分析餐盒剩余食物')
+          Text('演示流程：不会真实分析或上传任何图像')
             .fontSize(12)
-            .fontColor('#DDDDDD')
+            .fontColor($r('app.color.c_on_brand_sub'))
         }
         .width('100%')
         .height('100%')
         .justifyContent(FlexAlign.Center)
-        .backgroundColor('rgba(0,0,0,0.55)')
+        .backgroundColor($r('app.color.c_mask'))
       }
 
       // 打卡成功弹层
@@ -282,23 +309,23 @@ export struct PlatePage {
           Column({ space: 8 }) {
             Text('🎉')
               .fontSize(48)
-            Text('光盘成功！')
+            Text('光盘成功！（演示）')
               .fontSize(20)
               .fontWeight(FontWeight.Bold)
-              .fontColor('#222222')
+              .fontColor($r('app.color.c_text_primary'))
             Text('珍惜粮食，感谢你的坚持')
               .fontSize(13)
-              .fontColor('#777777')
-            Text('+20 积分')
+              .fontColor($r('app.color.c_text_secondary'))
+            Text('+20 积分（演示数据）')
               .fontSize(18)
               .fontWeight(FontWeight.Bold)
-              .fontColor('#2BB673')
+              .fontColor($r('app.color.c_success'))
               .margin({ top: 4 })
           }
           Button('开心收下')
             .fontSize(15)
             .fontColor(Color.White)
-            .backgroundColor('#2BB673')
+            .backgroundColor('#177A4C')
             .width(200)
             .height(44)
             .borderRadius(22)
@@ -308,11 +335,12 @@ export struct PlatePage {
         }
         .width('82%')
         .padding({ top: 30, bottom: 26, left: 20, right: 20 })
-        .backgroundColor(Color.White)
+        .backgroundColor($r('app.color.c_card_bg'))
         .borderRadius(18)
       }
     }
     .width('100%')
     .height('100%')
+    .backgroundColor($r('app.color.c_page_bg'))
   }
 }

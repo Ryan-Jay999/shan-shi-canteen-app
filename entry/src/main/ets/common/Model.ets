@@ -75,22 +75,22 @@ export function levelText(level: CrowdLevel): string {
   return '拥挤';
 }
 
-export function levelColor(level: CrowdLevel): string {
+export function levelColor(level: CrowdLevel): ResourceColor {
   if (level === CrowdLevel.Free) {
-    return '#2BB673';
+    return $r('app.color.c_success');
   } else if (level === CrowdLevel.Busy) {
-    return '#F59B23';
+    return $r('app.color.c_warn');
   }
-  return '#F04E4E';
+  return $r('app.color.c_danger');
 }
 
-export function levelBg(level: CrowdLevel): string {
+export function levelBg(level: CrowdLevel): ResourceColor {
   if (level === CrowdLevel.Free) {
-    return '#E8F8F0';
+    return $r('app.color.c_success_bg');
   } else if (level === CrowdLevel.Busy) {
-    return '#FDF3E3';
+    return $r('app.color.c_warn_bg');
   }
-  return '#FDEAEA';
+  return $r('app.color.c_danger_bg');
 }
 
 export function findCanteen(id: number): Canteen {

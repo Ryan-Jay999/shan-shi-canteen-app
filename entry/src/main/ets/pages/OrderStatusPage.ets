@@ -1,5 +1,6 @@
 import { router } from '@kit.ArkUI';
 import { OrderDish, OrderInfo } from '../common/Model';
+import { DemoNotice } from '../common/Widgets';
 
 @Entry
 @Component
@@ -28,15 +29,15 @@ struct OrderStatusPage {
     Row({ space: 10 }) {
       Text(no)
         .fontSize(12)
-        .fontColor(done ? Color.White : '#BBBBBB')
-        .backgroundColor(done ? '#FF6B35' : '#EEEEEE')
+        .fontColor(done ? Color.White : $r('app.color.c_disabled_icon'))
+        .backgroundColor(done ? '#FF6B35' : $r('app.color.c_disabled_bg2'))
         .width(26)
         .height(26)
         .borderRadius(13)
         .textAlign(TextAlign.Center)
       Text(label)
         .fontSize(14)
-        .fontColor(done ? '#222222' : '#999999')
+        .fontColor(done ? $r('app.color.c_text_primary') : $r('app.color.c_text_tertiary'))
         .fontWeight(done ? FontWeight.Medium : FontWeight.Normal)
     }
   }
@@ -49,10 +50,10 @@ struct OrderStatusPage {
             .fontSize(40)
           Text('暂无进行中的订单')
             .fontSize(14)
-            .fontColor('#999999')
+            .fontColor($r('app.color.c_text_tertiary'))
           Text('去点餐')
             .fontSize(14)
-            .fontColor('#FF6B35')
+            .fontColor($r('app.color.c_brand'))
             .margin({ top: 8 })
             .onClick(() => {
               router.back();
@@ -61,42 +62,47 @@ struct OrderStatusPage {
         .width('100%')
         .layoutWeight(1)
         .justifyContent(FlexAlign.Center)
+        .backgroundColor($r('app.color.c_page_bg'))
       } else {
         Scroll() {
           Column({ space: 14 }) {
             // 取餐码卡片
             Column({ space: 10 }) {
-              Text('🔔 下单成功，请等待叫号')
+              Text('🔔 演示下单成功')
                 .fontSize(15)
                 .fontWeight(FontWeight.Bold)
-                .fontColor('#7A3B12')
+                .fontColor($r('app.color.c_warm_text'))
               Text(this.order.pickupNo)
                 .fontSize(56)
                 .fontWeight(FontWeight.Bold)
                 .fontColor('#FF6B35')
                 .margin({ top: 4, bottom: 4 })
-              Text(`前方还有 3 单 · 预计 8 分钟可取`)
+              Text('演示：前方还有 3 单 · 预计 8 分钟可取')
                 .fontSize(13)
-                .fontColor('#A36534')
+                .fontColor($r('app.color.c_warm_subtext'))
               Text(`${this.order.canteenName} · ${this.order.slot}`)
                 .fontSize(12)
-                .fontColor('#A36534')
+                .fontColor($r('app.color.c_warm_subtext'))
+              Text('该取餐号与进度均为演示数据，不会真实出餐')
+                .fontSize(11)
+                .fontColor($r('app.color.c_warm_subtext'))
+                .margin({ top: 2 })
             }
             .width('100%')
-            .padding({ top: 24, bottom: 24 })
-            .backgroundColor('#FFF3E8')
+            .padding({ top: 24, bottom: 24, left: 12, right: 12 })
+            .backgroundColor($r('app.color.c_warm_bg3'))
             .borderRadius(14)
 
             // 进度
             Column({ space: 16 }) {
-              this.Step('1', '商家已接单', true)
-              this.Step('2', '正在备餐中', true)
-              this.Step('3', '等待取餐', false)
-              this.Step('4', '已完成', false)
+              this.Step('1', '商家已接单（演示）', true)
+              this.Step('2', '正在备餐中（演示）', true)
+              this.Step('3', '等待取餐（演示）', false)
+              this.Step('4', '已完成（演示）', false)
             }
             .width('100%')
             .padding(16)
-            .backgroundColor(Color.White)
+            .backgroundColor($r('app.color.c_card_bg'))
             .borderRadius(14)
 
             // 订单内容
@@ -104,21 +110,21 @@ struct OrderStatusPage {
               Text('订单内容')
                 .fontSize(14)
                 .fontWeight(FontWeight.Medium)
-                .fontColor('#222222')
+                .fontColor($r('app.color.c_text_primary'))
                 .width('100%')
               ForEach(this.order.items, (d: OrderDish) => {
                 Row() {
                   Text(d.name)
                     .fontSize(13)
-                    .fontColor('#333333')
+                    .fontColor($r('app.color.c_text_body'))
                     .layoutWeight(1)
                   Text(`x${d.qty}`)
                     .fontSize(13)
-                    .fontColor('#999999')
+                    .fontColor($r('app.color.c_text_tertiary'))
                     .margin({ right: 16 })
                   Text(`¥${(d.price * d.qty).toFixed(1)}`)
                     .fontSize(13)
-                    .fontColor('#333333')
+                    .fontColor($r('app.color.c_text_body'))
                 }
                 .width('100%')
               }, (d: OrderDish) => d.name)
@@ -126,19 +132,19 @@ struct OrderStatusPage {
                 Text('合计')
                   .fontSize(14)
                   .fontWeight(FontWeight.Medium)
-                  .fontColor('#222222')
+                  .fontColor($r('app.color.c_text_primary'))
                   .layoutWeight(1)
                 Text(`¥${this.order.total.toFixed(1)}`)
                   .fontSize(16)
                   .fontWeight(FontWeight.Bold)
-                  .fontColor('#F04E4E')
+                  .fontColor($r('app.color.c_danger'))
               }
               .width('100%')
               .margin({ top: 4 })
             }
             .width('100%')
             .padding(16)
-            .backgroundColor(Color.White)
+            .backgroundColor($r('app.color.c_card_bg'))
             .borderRadius(14)
 
             if (!this.order.finished) {
@@ -153,12 +159,14 @@ struct OrderStatusPage {
                   this.finishAndGoPlate();
                 })
             } else {
-              Text('✅ 订单已完成，记得光盘打卡领积分')
+              Text('✅ 订单已完成（演示），记得光盘打卡领积分')
                 .fontSize(13)
-                .fontColor('#2BB673')
+                .fontColor($r('app.color.c_success'))
                 .width('100%')
                 .textAlign(TextAlign.Center)
             }
+
+            DemoNotice({ text: '演示数据：本页订单、取餐号与进度均为演示内容，不会真实出餐，也不产生扣款。' })
           }
           .width('100%')
           .padding(16)
@@ -166,7 +174,7 @@ struct OrderStatusPage {
         .layoutWeight(1)
         .scrollBar(BarState.Off)
         .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: true })
-        .backgroundColor('#F5F6F8')
+        .backgroundColor($r('app.color.c_page_bg'))
       }
     }
     .width('100%')

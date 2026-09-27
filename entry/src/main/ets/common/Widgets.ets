@@ -28,8 +28,8 @@ export struct DishCounter {
       if (this.qty > 0) {
         Button('−')
           .fontSize(16)
-          .fontColor('#FF6B35')
-          .backgroundColor('#FFF0E8')
+          .fontColor($r('app.color.c_brand'))
+          .backgroundColor($r('app.color.c_brand_bg'))
           .width(26)
           .height(26)
           .borderRadius(13)
@@ -39,7 +39,7 @@ export struct DishCounter {
           })
         Text(this.qty.toString())
           .fontSize(14)
-          .fontColor('#333333')
+          .fontColor($r('app.color.c_text_body'))
           .width(28)
           .textAlign(TextAlign.Center)
       }
@@ -69,13 +69,13 @@ export struct CommonTopBar {
       Text(this.title)
         .fontSize(17)
         .fontWeight(FontWeight.Medium)
-        .fontColor('#222222')
+        .fontColor($r('app.color.c_text_primary'))
         .width('100%')
         .textAlign(TextAlign.Center)
       if (this.showBack) {
         Text('‹')
           .fontSize(30)
-          .fontColor('#333333')
+          .fontColor($r('app.color.c_text_body'))
           .margin({ left: 12 })
           .onClick(() => {
             router.back();
@@ -84,7 +84,7 @@ export struct CommonTopBar {
     }
     .width('100%')
     .height(48)
-    .backgroundColor(Color.White)
+    .backgroundColor($r('app.color.c_card_bg'))
   }
 }
 
@@ -99,14 +99,48 @@ export struct SectionTitle {
       Text(this.text)
         .fontSize(16)
         .fontWeight(FontWeight.Bold)
-        .fontColor('#222222')
+        .fontColor($r('app.color.c_text_primary'))
       Blank()
       if (this.extra.length > 0) {
         Text(this.extra)
           .fontSize(12)
-          .fontColor('#999999')
+          .fontColor($r('app.color.c_text_tertiary'))
       }
     }
     .width('100%')
+  }
+}
+
+// 「演示数据」标识
+@Component
+export struct DemoBadge {
+  build() {
+    Text('演示数据')
+      .fontSize(10)
+      .fontColor($r('app.color.c_brand_text'))
+      .backgroundColor($r('app.color.c_brand_bg'))
+      .padding({ left: 6, right: 6, top: 2, bottom: 2 })
+      .borderRadius(6)
+  }
+}
+
+// 演示版声明横幅
+@Component
+export struct DemoNotice {
+  @Prop text: string = '';
+
+  build() {
+    Row({ space: 8 }) {
+      Text('ℹ️')
+        .fontSize(14)
+      Text(this.text)
+        .fontSize(11)
+        .fontColor($r('app.color.c_warm_text'))
+        .layoutWeight(1)
+    }
+    .width('100%')
+    .padding(10)
+    .backgroundColor($r('app.color.c_warm_bg'))
+    .borderRadius(10)
   }
 }

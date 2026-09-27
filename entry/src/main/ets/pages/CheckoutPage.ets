@@ -1,7 +1,7 @@
 import { router } from '@kit.ArkUI';
 import { OrderDish, OrderInfo } from '../common/Model';
 import { CartItem, CartManager, Store } from '../common/Store';
-import { CommonTopBar, DishCounter } from '../common/Widgets';
+import { CommonTopBar, DemoNotice, DishCounter } from '../common/Widgets';
 
 interface CheckGroup {
   windowName: string;
@@ -66,17 +66,19 @@ struct CheckoutPage {
 
       Scroll() {
         Column({ space: 12 }) {
+          DemoNotice({ text: '演示下单：本次下单不会产生真实扣款，也不会真实出餐，取餐号为演示编号。' })
+
           // 取餐方式
           Column({ space: 10 }) {
             Row() {
               Text('取餐方式')
                 .fontSize(14)
                 .fontWeight(FontWeight.Medium)
-                .fontColor('#222222')
+                .fontColor($r('app.color.c_text_primary'))
                 .layoutWeight(1)
               Text('食堂窗口自提 🧍')
                 .fontSize(12)
-                .fontColor('#666666')
+                .fontColor($r('app.color.c_text_secondary'))
             }
             .width('100%')
 
@@ -84,8 +86,8 @@ struct CheckoutPage {
               ForEach(this.slots, (s: string, idx: number) => {
                 Text(s)
                   .fontSize(12)
-                  .fontColor(this.selectedSlot === idx ? '#FF6B35' : '#666666')
-                  .backgroundColor(this.selectedSlot === idx ? '#FFF0E8' : '#F5F6F8')
+                  .fontColor(this.selectedSlot === idx ? $r('app.color.c_brand') : $r('app.color.c_text_secondary'))
+                  .backgroundColor(this.selectedSlot === idx ? $r('app.color.c_brand_bg') : $r('app.color.c_chip_bg'))
                   .borderRadius(8)
                   .padding({ left: 10, right: 10, top: 7, bottom: 7 })
                   .margin({ right: 8, bottom: 8 })
@@ -98,7 +100,7 @@ struct CheckoutPage {
           }
           .width('100%')
           .padding(14)
-          .backgroundColor(Color.White)
+          .backgroundColor($r('app.color.c_card_bg'))
           .borderRadius(12)
 
           // 按窗口分组的菜品
@@ -107,12 +109,12 @@ struct CheckoutPage {
               Row() {
                 Text(`🏪 ${g.canteenName}`)
                   .fontSize(12)
-                  .fontColor('#888888')
+                  .fontColor($r('app.color.c_text_tertiary'))
                   .layoutWeight(1)
                 Text(g.windowName)
                   .fontSize(13)
                   .fontWeight(FontWeight.Medium)
-                  .fontColor('#222222')
+                  .fontColor($r('app.color.c_text_primary'))
               }
               .width('100%')
 
@@ -121,10 +123,10 @@ struct CheckoutPage {
                   Column({ space: 3 }) {
                     Text(it.name)
                       .fontSize(14)
-                      .fontColor('#222222')
+                      .fontColor($r('app.color.c_text_primary'))
                     Text(`¥${it.price.toFixed(1)} / 份`)
                       .fontSize(11)
-                      .fontColor('#999999')
+                      .fontColor($r('app.color.c_text_tertiary'))
                   }
                   .alignItems(HorizontalAlign.Start)
                   .layoutWeight(1)
@@ -143,7 +145,7 @@ struct CheckoutPage {
             }
             .width('100%')
             .padding(14)
-            .backgroundColor(Color.White)
+            .backgroundColor($r('app.color.c_card_bg'))
             .borderRadius(12)
           }, (g: CheckGroup) => g.windowName)
 
@@ -152,39 +154,39 @@ struct CheckoutPage {
             Row() {
               Text('餐品合计')
                 .fontSize(13)
-                .fontColor('#666666')
+                .fontColor($r('app.color.c_text_secondary'))
                 .layoutWeight(1)
               Text(`¥${this.cart.total().toFixed(1)}`)
                 .fontSize(13)
-                .fontColor('#333333')
+                .fontColor($r('app.color.c_text_body'))
             }
             Row() {
               Text('打包费')
                 .fontSize(13)
-                .fontColor('#666666')
+                .fontColor($r('app.color.c_text_secondary'))
                 .layoutWeight(1)
               Text('¥0.0')
                 .fontSize(13)
-                .fontColor('#333333')
+                .fontColor($r('app.color.c_text_body'))
             }
             Row() {
               Text('光盘可得积分')
                 .fontSize(13)
-                .fontColor('#666666')
+                .fontColor($r('app.color.c_text_secondary'))
                 .layoutWeight(1)
               Text('+20 积分')
                 .fontSize(13)
-                .fontColor('#FF6B35')
+                .fontColor($r('app.color.c_brand_text'))
             }
           }
           .width('100%')
           .padding(14)
-          .backgroundColor(Color.White)
+          .backgroundColor($r('app.color.c_card_bg'))
           .borderRadius(12)
 
-          Text('🥬 温馨提示：按需点餐，吃完可参与光盘打卡领积分')
+          Text('🥬 温馨提示：按需点餐，吃完可参与光盘打卡领积分（演示）')
             .fontSize(11)
-            .fontColor('#999999')
+            .fontColor($r('app.color.c_text_tertiary'))
             .width('100%')
             .margin({ bottom: 8 })
         }
@@ -194,7 +196,11 @@ struct CheckoutPage {
       .layoutWeight(1)
       .scrollBar(BarState.Off)
       .edgeEffect(EdgeEffect.Spring, { alwaysEnabled: true })
-      .linearGradient({ angle: 165, colors: [['#FFF9F0', 0.0], ['#FFF0DA', 0.55], ['#FFF7EC', 1.0]] })
+      .linearGradient({
+        angle: 165,
+        colors: [[$r('app.color.c_grad_order1'), 0.0], [$r('app.color.c_grad_order2'), 0.55],
+          [$r('app.color.c_grad_order3'), 1.0]]
+      })
       .backgroundImage($r('app.media.bg_food_doodle'), ImageRepeat.XY)
 
       // 底部支付栏
@@ -203,10 +209,10 @@ struct CheckoutPage {
           Text(`¥${this.cart.total().toFixed(1)}`)
             .fontSize(20)
             .fontWeight(FontWeight.Bold)
-            .fontColor('#F04E4E')
-          Text('校园卡支付')
+            .fontColor($r('app.color.c_danger'))
+          Text('演示下单 · 不产生真实扣款')
             .fontSize(11)
-            .fontColor('#999999')
+            .fontColor($r('app.color.c_text_tertiary'))
         }
         .alignItems(HorizontalAlign.Start)
         .layoutWeight(1)
@@ -226,7 +232,7 @@ struct CheckoutPage {
       }
       .width('100%')
       .height(70)
-      .backgroundColor(Color.White)
+      .backgroundColor($r('app.color.c_card_bg'))
     }
     .width('100%')
     .height('100%')

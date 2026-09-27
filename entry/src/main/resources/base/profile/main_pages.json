@@ -4,6 +4,9 @@
     "pages/CanteenDetailPage",
     "pages/CheckoutPage",
     "pages/OrderStatusPage",
-    "pages/PointsDetailPage"
+    "pages/PointsDetailPage",
+    "pages/AgreementPage",
+    "pages/SettingsPage",
+    "pages/SupportPage"
   ]
 }
