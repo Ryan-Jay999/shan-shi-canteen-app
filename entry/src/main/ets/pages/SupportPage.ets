@@ -3,7 +3,7 @@ import { pasteboard } from '@kit.BasicServicesKit';
 import { CommonTopBar, DemoNotice } from '../common/Widgets';
 
 // 客服联系方式（如需更换为学校/团队的官方邮箱，仅需修改此常量）
-const SUPPORT_EMAIL = 'Ryan-Jay999@users.noreply.github.com';
+const SUPPORT_EMAIL = '3304923586@qq.com';
 const FEEDBACK_URL = 'https://github.com/Ryan-Jay999/shan-shi-canteen-app/issues';
 
 interface Faq {
